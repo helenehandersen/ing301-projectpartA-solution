@@ -1,3 +1,4 @@
+from persistence import SmartHousePersistence
 from smarthouse import SmartHouse
 from devices import *
 from pathlib import Path
@@ -11,6 +12,12 @@ def load_demo_house_devices_map():
         for line in f.readlines():
             data = line.split(",")
             result[int(data[0])] = (data[2], data[3], data[4].strip())  # Supplier, Product, Serial No
+    return result
+
+
+def load_demo_house(persistence: SmartHousePersistence) -> SmartHouse:
+    result = SmartHouse()
+    # TODO read rooms, devices and their locations from the database
     return result
 
 
