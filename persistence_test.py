@@ -31,7 +31,8 @@ class PersistenceTest(unittest.TestCase):
         self.assertEqual(8, len(devices))
 
     def test_updating_sensor_state(self):
-        bedroom = PersistenceTest.house.get_room_with_device(PersistenceTest.house.find_device_by_serial_no("627ff5f3-f4f5-47bd"))
+        bedroom = PersistenceTest.house.get_room_with_device(
+            PersistenceTest.house.find_device_by_serial_no("627ff5f3-f4f5-47bd"))
         PersistenceTest.house.turn_off_lights_in_room(bedroom)
         PersistenceTest.house.set_temperature_in_room(bedroom, 18.1)
         PersistenceTest.p.save()

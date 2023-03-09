@@ -126,7 +126,7 @@ class SmartHouse:
 
     def create_room(self, floor_no: int, area: float, name: str = None) -> Room:
         if not floor_no <= len(self.floors) or floor_no <= 0:  # We do not have basements right now
-            raise LookupError(f"Floor wit no {floor_no} does not exist!")
+            raise LookupError(f"Floor with no {floor_no} does not exist!")
         f = self.floors[floor_no - 1]
         r = Room(area, name)
         f.rooms.append(r)

@@ -16,7 +16,36 @@ def load_demo_house_devices_map():
 
 
 def load_demo_house(persistence: SmartHousePersistence) -> SmartHouse:
+    # Get all rooms
+    rooms_query = "SELECT id, floor, area, name FROM rooms"
+    rooms_data = persistence.cursor.execute(rooms_query).fetchall()
+
+    #Get all devices
+    devices_query = "SELECT id, room, type, producer, product_name, serial_no FROM devices"
+    devices_data = persistence.cursor.execute(devices_query).fetchall()
+
     result = SmartHouse()
+
+    # Register rooms
+    floors = {}
+    for room_row in rooms_data:
+        room_id, floor_no, area, name = room_row
+        if floor_no not in floors:
+            floor = result.create_floor()
+            floors[floor_no] = floor
+        else:
+            floor = floors[floor_no]
+        room = result.create_room(floor_no, area, name)
+
+    #Register devices
+    devices = {}
+    for device_row in devices_data:
+        device_id, room_id, device_type, producer, product_name, serial_no = device_row
+        if device_id not in devices:
+            device = result.register_device(device_id, room)
+        device = result.get_no_of_devices()
+
+
     # TODO read rooms, devices and their locations from the database
     return result
 
