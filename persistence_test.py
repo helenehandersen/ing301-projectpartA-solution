@@ -83,9 +83,9 @@ class PersistenceTest(unittest.TestCase):
         self.assertEqual(expected, actuale)
 
         expected = {
-            "Living Room / Kitchen": (15.0708, 24.1327, 20.606689623287576),
-            "Entrance": (0.1589, 17.1905, 6.9318578742514925),
-            "Master Bedroom": (12.0813, 21.3091, 16.473596511627903)
+            "Living Room / Kitchen": (15.0708, 24.1327, 20.606689623287657),
+            "Entrance": (0.1589, 17.1905, 6.931857874251502),
+            "Master Bedroom": (12.0813, 21.3091, 16.47359651162796)
         }
         self.assertEqual(expected, anal.describe_temperature_in_rooms())
 

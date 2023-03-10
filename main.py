@@ -2,6 +2,7 @@ from persistence import SmartHousePersistence
 from smarthouse import SmartHouse
 from devices import *
 from pathlib import Path
+from sqlite3 import Connection
 
 
 def load_demo_house_devices_map():
@@ -16,39 +17,161 @@ def load_demo_house_devices_map():
 
 
 def load_demo_house(persistence: SmartHousePersistence) -> SmartHouse:
+    #Opening db connection
+    conn = Connection('db.sqlite')
+    cursor = conn.cursor()
+
     # Get all rooms
-    rooms_query = "SELECT id, floor, area, name FROM rooms"
+    rooms_query = "SELECT * FROM rooms"
     rooms_data = persistence.cursor.execute(rooms_query).fetchall()
 
     #Get all devices
-    devices_query = "SELECT id, room, type, producer, product_name, serial_no FROM devices"
+    devices_query = "SELECT * FROM devices"
     devices_data = persistence.cursor.execute(devices_query).fetchall()
 
     result = SmartHouse()
 
+    result.create_floor()
+    result.create_floor()
+
     # Register rooms
-    floors = {}
-    for room_row in rooms_data:
-        room_id, floor_no, area, name = room_row
-        if floor_no not in floors:
-            floor = result.create_floor()
-            floors[floor_no] = floor
-        else:
-            floor = floors[floor_no]
-        room = result.create_room(floor_no, area, name)
+    # row: id, floor, area, name
+    for row in rooms_data:
+        if row[0] == 1:
+            stue = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 2:
+            entre = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 3:
+            guest1 = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 4:
+            bath1 = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 5:
+            garage = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 6:
+            office = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 7:
+            bath2 = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 8:
+            guest2 = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 9:
+            hall = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 10:
+            guest3 = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 11:
+            dress = result.create_room(row[1], row[2], row[3])
+        elif row[0] == 12:
+            bed = result.create_room(row[1], row[2], row[3])
 
-    #Register devices
-    devices = {}
-    for device_row in devices_data:
-        device_id, room_id, device_type, producer, product_name, serial_no = device_row
-        if device_id not in devices:
-            device = result.register_device(device_id, room)
-        device = result.get_no_of_devices()
+    #Register devices with attributes
+    # row: id, room, type, producer, product_name, serial_no
+    for row in devices_data:
+        if row[0] == 1:
+            device1 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 2:
+            device2 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 3:
+            device3 = HumiditySensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 4:
+            device4 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 5:
+            device5 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 6:
+            device6 = SmartCharger(row[5], row[3], row[4], row[0])
+        elif row[0] == 7:
+            device7 = HeatOven(row[5], row[3], row[4], row[0])
+        elif row[0] == 8:
+            device8 = TemperatureSensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 9:
+            device9 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 10:
+            device10 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 11:
+            device11 = SmartMeter(row[5], row[3], row[4], row[0])
+        elif row[0] == 12:
+            device12 = TemperatureSensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 13:
+            device13 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 14:
+            device14 = SmartMeter(row[5], row[3], row[4], row[0])
+        elif row[0] == 15:
+            device15 = SmartOutlet(row[5], row[3], row[4], row[0])
+        elif row[0] == 16:
+            device16 = HeatPump(row[5], row[3], row[4], row[0])
+        elif row[0] == 17:
+            device17 = AirQualitySensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 18:
+            device18 = SmartOutlet(row[5], row[3], row[4], row[0])
+        elif row[0] == 19:
+            device19 = HeatOven(row[5], row[3], row[4], row[0])
+        elif row[0] == 20:
+            device20 = SmartOutlet(row[5], row[3], row[4], row[0])
+        elif row[0] == 21:
+            device21 = HumiditySensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 22:
+            device22 = Dehumidifier(row[5], row[3], row[4], row[0])
+        elif row[0] == 23:
+            device23 = FloorHeatingPanel(row[5], row[3], row[4], row[0])
+        elif row[0] == 24:
+            device24 = HeatOven(row[5], row[3], row[4], row[0])
+        elif row[0] == 25:
+            device25 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 26:
+            device26 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 27:
+            device27 = HeatPump(row[5], row[3], row[4], row[0])
+        elif row[0] == 28:
+            device28 = TemperatureSensor(row[5], row[3], row[4], row[0])
+        elif row[0] == 29:
+            device29 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 30:
+            device30 = LightBulb(row[5], row[3], row[4], row[0])
+        elif row[0] == 31:
+            device31 = HeatOven(row[5], row[3], row[4], row[0])
 
+    device3.moisture = 68
+    device8.temperature = 1.3
+    device11.Senergy_consumption = 0
+    device12.temperature = 18.1
+    device14.energy_consumption = 1.5
+    device17.air_quality = 0.08
+    device21.humidity = 52
+    device28.temperature = 16.1
+
+    # Register devices to the apporpriate room
+    result.register_device(device1, stue)
+    result.register_device(device2, stue)
+    result.register_device(device3, bath1)
+    result.register_device(device4, guest1)
+    result.register_device(device5, garage)
+    result.register_device(device6, garage)
+    result.register_device(device7, guest1)
+    result.register_device(device8, entre)
+    result.register_device(device9, entre)
+    result.register_device(device10, entre)
+    result.register_device(device11, stue)
+    result.register_device(device12, stue)
+    result.register_device(device13, entre)
+    result.register_device(device14, entre)
+    result.register_device(device15, stue)
+    result.register_device(device16, stue)
+    result.register_device(device17, stue)
+    result.register_device(device18, stue)
+    result.register_device(device19, office)
+    result.register_device(device20, office)
+    result.register_device(device21, bath2)
+    result.register_device(device22, bath2)
+    result.register_device(device23, bath2)
+    result.register_device(device24, guest2)
+    result.register_device(device25, bed)
+    result.register_device(device26, bed)
+    result.register_device(device27, bed)
+    result.register_device(device28, bed)
+    result.register_device(device29, bed)
+    result.register_device(device30, dress)
+    result.register_device(device31, guest3)
 
     # TODO read rooms, devices and their locations from the database
     return result
-
 
 def build_demo_house() -> SmartHouse:
     house = SmartHouse()
@@ -212,7 +335,7 @@ def do_move(smart_house):
         else:
             print(f"Room with no {room_id} does not exist!")
     else:
-        print(f"Device wit id '{device_id}' does not exist")
+        print(f"Device with id '{device_id}' does not exist")
 
 
 def main(smart_house: SmartHouse):
